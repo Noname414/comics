@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2025-06-18T22:47:32.169802",
-  "totalComics": 6,
+  "lastUpdated": "2025-06-18T16:33:24.293866",
+  "totalComics": 7,
   "comics": [
     {
       "id": "comic_output_川普不不到稀土_20250618_194510",
@@ -51,6 +51,16 @@
       "imagePath": "comic_output_川普提前結束G7_20250618_191426/four_panel_comic.png",
       "scriptPath": "comic_output_川普提前結束G7_20250618_191426/comic_script.txt",
       "folder": "comic_output_川普提前結束G7_20250618_191426"
+    },
+    {
+      "id": "comic_output_大大的罷免_20250618_163243",
+      "title": "大大的罷免",
+      "keyword": "大大的罷免",
+      "date": "2025年06月18日 16:32",
+      "timestamp": "20250618_163243",
+      "imagePath": "comic_output_大大的罷免_20250618_163243/four_panel_comic.png",
+      "scriptPath": "comic_output_大大的罷免_20250618_163243/comic_script.txt",
+      "folder": "comic_output_大大的罷免_20250618_163243"
     },
     {
       "id": "comic_output_小S撈錢_20250617_163329",
