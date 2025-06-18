@@ -378,8 +378,8 @@ def create_output_folder(keyword):
     # Create timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    # Create folder name
-    folder_name = f"comic_output_{clean_keyword}_{timestamp}"
+    # Create folder name under docs directory
+    folder_name = f"docs/comic_output_{clean_keyword}_{timestamp}"
     
     # Create the folder if it doesn't exist
     if not os.path.exists(folder_name):
