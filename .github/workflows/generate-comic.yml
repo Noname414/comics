@@ -28,8 +28,9 @@ jobs:
     
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip
         pip install -r requirements.txt
+        echo "✅ 依賴安裝完成"
     
     - name: Extract keyword from issue or input
       id: extract_keyword
@@ -42,6 +43,7 @@ jobs:
           keyword=$(echo "$title" | sed 's/Generate Comic: //')
           echo "keyword=$keyword" >> $GITHUB_OUTPUT
         fi
+        echo "提取的關鍵字: $(cat $GITHUB_OUTPUT | grep keyword | cut -d'=' -f2)"
     
     - name: Generate comic
       env:
@@ -50,13 +52,34 @@ jobs:
         keyword="${{ steps.extract_keyword.outputs.keyword }}"
         echo "正在為關鍵字 '$keyword' 生成四格漫畫..."
         
+        # 檢查 API 金鑰
+        if [ -z "$GOOGLE_API_KEY" ]; then
+          echo "❌ 錯誤：GOOGLE_API_KEY 未設定"
+          exit 1
+        fi
+        
         # 執行漫畫生成
         cd "${{ github.workspace }}"
-        python comic_generator.py "$keyword"
+        echo "工作目錄: $(pwd)"
+        echo "執行命令: python3 comic_generator.py '$keyword'"
+        
+        # 執行並捕獲輸出
+        if python3 comic_generator.py "$keyword"; then
+          echo "✅ 漫畫生成成功"
+        else
+          echo "❌ 漫畫生成失敗"
+          exit 1
+        fi
     
     - name: Update gallery manifest
       run: |
-        python generate_manifest.py
+        echo "更新圖庫清單..."
+        if python3 generate_manifest.py; then
+          echo "✅ 清單更新成功"
+        else
+          echo "❌ 清單更新失敗"
+          exit 1
+        fi
     
     - name: Commit and push changes
       run: |
