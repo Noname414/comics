@@ -2,33 +2,78 @@
 const GITHUB_CONFIG = {
     owner: 'sheng-luen-chung',  // 你的 GitHub 用戶名
     repo: 'comics',             // 你的倉庫名稱
-    // 當前使用手動觸發方案            // 顯示重新整理提示
-            setTimeout(() => {
-                showStatus(`
-                    <div>
-                        <p><strong>如果 GitHub Actions 頁面沒有自動開啟：</strong></p>
-                        <a href="https://github.com/sheng-luen-chung/comics/actions" target="_blank" 
-                           style="display: inline-block; background: #007bff; color: white; padding: 0.8rem 1.5rem; 
-                                  border-radius: 8px; text-decoration: none; margin: 0.5rem;">
-                            🔗 點擊前往 GitHub Actions
-                        </a>
-                        <br><br>
-                        <p>📖 執行完成後，點擊下方按鈕檢查是否有新漫畫：</p>
-                        <button onclick="checkAndReloadComics('${keyword}')" 
-                                style="background: #4ECDC4; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; margin: 0.5rem;">
-                            🔄 檢查新漫畫
-                        </button>
-                        <button onclick="location.reload()" 
-                                style="background: #FF6B6B; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; margin: 0.5rem;">
-                            🔄 重新整理頁面
-                        </button>
-                    </div>
-                `, 'info');
-            }, 2000);導用戶到 GitHub Actions 手動觸發
+    branch: 'main'              // 主要分支
+};
+
+// 載入漫畫列表
+async function loadComics() {
+    try {
+        const response = await fetch('comics_manifest.json?t=' + Date.now());
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        displayComics(data.comics || []);
+    } catch (error) {
+        console.error('Error loading comics:', error);
+        const gallery = document.getElementById('comic-gallery');
+        if (gallery) {
+            gallery.innerHTML = '<p style="color: white; text-align: center;">無法載入漫畫列表，請稍後再試</p>';
+        }
+    }
+}
+
+// 顯示漫畫
+function displayComics(comics) {
+    const gallery = document.getElementById('comic-gallery');
+    if (!gallery) return;
+    
+    if (!comics.length) {
+        gallery.innerHTML = '<p style="color: white; text-align: center;">目前還沒有漫畫作品</p>';
+        return;
+    }
+    
+    gallery.innerHTML = comics.map(comic => `
+        <div class="comic-card" onclick="openModal('${comic.image}', '${comic.title}', '${comic.timestamp}')">
+            <img src="${comic.image}" alt="${comic.title}" onerror="this.src='placeholder.jpg'">
+            <div class="comic-info">
+                <h3>${comic.title}</h3>
+                <p class="comic-date">${new Date(comic.timestamp).toLocaleString('zh-TW')}</p>
+                <div class="comic-keyword">${comic.keyword}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 開啟大圖預覽
+function openModal(imageSrc, title, timestamp) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDate = document.getElementById('modalDate');
+    
+    if (modal && modalImg && modalTitle && modalDate) {
+        modal.style.display = 'flex';
+        modalImg.src = imageSrc;
+        modalTitle.textContent = title;
+        modalDate.textContent = new Date(timestamp).toLocaleString('zh-TW');
+    }
+}
+
+// 關閉大圖預覽
+function closeModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// 主要的漫畫生成函數 - 引導用戶到 GitHub Actions 手動觸發
 async function triggerComicGeneration(keyword) {
     try {
-        // 準備 GitHub Actions URL - 修正為正確的路徑
-        const actionsUrl = `https://github.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/actions`;
+        // 準備 GitHub Actions URL
+        const actionsUrl = `https://github.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/actions/workflows/generate-comic.yml`;
         
         console.log('正在開啟 GitHub Actions 頁面:', actionsUrl);
         
@@ -62,7 +107,7 @@ function showDetailedInstructions(keyword) {
             
             <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #ffc107;">
                 <strong>🔗 如果頁面沒有自動開啟：</strong><br>
-                <a href="https://github.com/sheng-luen-chung/comics/actions" target="_blank" style="color: #007bff; text-decoration: underline;">
+                <a href="https://github.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/actions/workflows/generate-comic.yml" target="_blank" style="color: #007bff; text-decoration: underline;">
                     點擊這裡手動前往 GitHub Actions
                 </a>
             </div>
@@ -71,9 +116,9 @@ function showDetailedInstructions(keyword) {
             <ol style="color: #555; line-height: 1.8; margin-bottom: 1.5rem;">
                 <li>在 GitHub Actions 頁面中找到 <strong>"Generate Comic from Keyword"</strong> workflow</li>
                 <li>點擊該 workflow 進入詳細頁面</li>
-                <li>找到並點擊 <strong>"Run workflow"</strong> 按鈕（灰色或綠色按鈕）</li>
+                <li>找到並點擊 <strong>"Run workflow"</strong> 按鈕（右側的綠色或灰色按鈕）</li>
                 <li>在彈出的表單中，<strong>"新聞關鍵字"</strong> 欄位輸入：<br>
-                    <code style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 1.1em;">${keyword}</code></li>
+                    <code style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 1.1em; color: #d63384;">${keyword}</code></li>
                 <li>點擊綠色的 <strong>"Run workflow"</strong> 按鈕開始執行</li>
                 <li>等待 2-3 分鐘執行完成</li>
                 <li>回到此頁面點擊下方的 "檢查新漫畫" 按鈕</li>
@@ -87,17 +132,44 @@ function showDetailedInstructions(keyword) {
             </div>
             
             <div style="text-align: center; margin-top: 1.5rem;">
-                <button onclick="this.parentElement.parentElement.remove()" 
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" 
                         style="background: #4ECDC4; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; margin-right: 1rem;">
                     知道了
                 </button>
-                <button onclick="window.open('https://github.com/sheng-luen-chung/comics/actions', '_blank')" 
+                <button onclick="window.open('https://github.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/actions/workflows/generate-comic.yml', '_blank')" 
                         style="background: #007bff; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer;">
                     🔗 前往 GitHub Actions
                 </button>
             </div>
         </div>
     `;
+    
+    // 創建覆蓋層
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    `;
+    overlay.innerHTML = instructionsHtml;
+    
+    // 點擊覆蓋層關閉
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            overlay.remove();
+        }
+    });
+    
+    document.body.appendChild(overlay);
+}
     
     // 創建覆蓋層
     const overlay = document.createElement('div');
@@ -152,9 +224,6 @@ async function checkGenerationStatus(keyword) {
 async function generateComicWithStatusCheck() {
     const keywordInput = document.getElementById('keywordInput');
     const generateBtn = document.getElementById('generateBtn');
-    const btnText = document.getElementById('btnText');
-    const btnLoading = document.getElementById('btnLoading');
-    const statusDiv = document.getElementById('generateStatus');
     
     const keyword = keywordInput.value.trim();
     
@@ -229,5 +298,14 @@ async function checkAndReloadComics(keyword) {
     } catch (error) {
         showStatus('❌ 檢查過程中發生錯誤', 'error');
         console.error('Check error:', error);
+    }
+}
+
+// 顯示狀態訊息
+function showStatus(message, type) {
+    const statusDiv = document.getElementById('generateStatus');
+    if (statusDiv) {
+        statusDiv.innerHTML = message;
+        statusDiv.className = `status-message status-${type}`;
     }
 }

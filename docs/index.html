@@ -408,93 +408,15 @@
         }
 
         // Load comics when page loads
-        document.addEventListener('DOMContentLoaded', loadComics);
-
-        // 新增：生成四格漫畫功能
+        document.addEventListener('DOMContentLoaded', loadComics);        // 新增：生成四格漫畫功能（使用 comic-api.js 中的實現）
         async function generateComic() {
-            const keywordInput = document.getElementById('keywordInput');
-            const generateBtn = document.getElementById('generateBtn');
-            const btnText = document.getElementById('btnText');
-            const btnLoading = document.getElementById('btnLoading');
-            const statusDiv = document.getElementById('generateStatus');
-            
-            const keyword = keywordInput.value.trim();
-            
-            if (!keyword) {
-                showStatus('請輸入新聞關鍵字', 'error');
-                return;
-            }
-            
-            // 禁用按鈕和輸入框
-            generateBtn.disabled = true;
-            keywordInput.disabled = true;
-            btnText.style.display = 'none';
-            btnLoading.style.display = 'inline';
-            
-            try {
-                showStatus('正在觸發漫畫生成流程...', 'info');
-                
-                // 觸發 GitHub Actions workflow
-                const success = await triggerComicGeneration(keyword);
-                
-                if (success) {
-                    showStatus(`✅ 已成功觸發「${keyword}」四格漫畫生成！請等待 2-3 分鐘後重新整理頁面查看結果。`, 'success');
-                    
-                    // 清空輸入框
-                    keywordInput.value = '';
-                    
-                    // 3秒後自動重新載入漫畫列表
-                    setTimeout(() => {
-                        showStatus('正在檢查是否有新漫畫...', 'info');
-                        loadComics();
-                    }, 180000); // 3 分鐘後檢查
-                    
-                } else {
-                    showStatus('❌ 生成失敗，請稍後再試', 'error');
-                }
-                
-            } catch (error) {
-                console.error('Generation error:', error);
-                showStatus('❌ 生成過程中發生錯誤，請稍後再試', 'error');
-            } finally {
-                // 重新啟用按鈕和輸入框
-                setTimeout(() => {
-                    generateBtn.disabled = false;
-                    keywordInput.disabled = false;
-                    btnText.style.display = 'inline';
-                    btnLoading.style.display = 'none';
-                }, 5000); // 5秒後重新啟用
-            }
+            // 使用 comic-api.js 中的改進版本
+            await generateComicWithStatusCheck();
         }        // 顯示狀態訊息
         function showStatus(message, type) {
             const statusDiv = document.getElementById('generateStatus');
             statusDiv.innerHTML = message;  // 使用 innerHTML 支援 HTML 內容
             statusDiv.className = `status-message status-${type}`;
-        }
-
-        // 觸發 GitHub Actions
-        async function triggerComicGeneration(keyword) {
-            try {
-                // 方案1: 使用 GitHub Issues API (推薦)
-                const issueData = {
-                    title: `Generate Comic: ${keyword}`,
-                    body: `自動生成四格漫畫請求\n\n關鍵字: ${keyword}\n時間: ${new Date().toLocaleString('zh-TW')}\n\n此 issue 由網頁端自動創建，用於觸發漫畫生成流程。`,
-                    labels: ['comic-generation', 'auto-generated']
-                };
-
-                // 這裡需要配置 GitHub API，目前返回模擬成功
-                // 實際部署時需要設定 GitHub Token 和 Repository
-                console.log('會觸發生成:', issueData);
-                
-                // 模擬 API 調用
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                return true;
-                
-            } catch (error) {
-                console.error('Error triggering generation:', error);
-                return false;
-            }
         }
 
         // 鍵盤事件：按 Enter 生成漫畫
