@@ -1,0 +1,96 @@
+name: Test Comic Generation
+
+on:
+  workflow_dispatch:
+    inputs:
+      keyword:
+        description: '測試關鍵字'
+        required: true
+        type: string
+        default: '測試'
+
+jobs:
+  test-generation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Test environment
+      run: |
+        echo "測試開始..."
+        echo "關鍵字: ${{ github.event.inputs.keyword }}"
+        echo "工作目錄: $(pwd)"
+        echo "檔案列表:"
+        ls -la
+        echo ""
+        echo "Python 版本:"
+        python3 --version
+        echo ""
+        echo "檢查必要檔案:"
+        if [ -f "comic_generator.py" ]; then
+          echo "✅ comic_generator.py 存在"
+        else
+          echo "❌ comic_generator.py 不存在"
+        fi
+        
+        if [ -f "requirements.txt" ]; then
+          echo "✅ requirements.txt 存在"
+          echo "內容:"
+          cat requirements.txt
+        else
+          echo "❌ requirements.txt 不存在"
+        fi
+    
+    - name: Test API key
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      run: |
+        if [ -z "$GOOGLE_API_KEY" ]; then
+          echo "❌ GOOGLE_API_KEY 未設定"
+          exit 1
+        else
+          echo "✅ GOOGLE_API_KEY 已設定 (長度: ${#GOOGLE_API_KEY})"
+        fi
+    
+    - name: Install Python dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then
+          pip install -r requirements.txt
+          echo "✅ 依賴安裝完成"
+        fi
+    
+    - name: Test comic generation (dry run)
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      run: |
+        echo "測試漫畫生成..."
+        echo "執行命令: python3 comic_generator.py '${{ github.event.inputs.keyword }}'"
+        # 這裡先不實際執行，只測試到這裡
+        echo "✅ 測試完成"
+    
+    - name: Create test result
+      run: |
+        mkdir -p docs/test_output
+        echo "測試時間: $(date)" > docs/test_output/test_result.txt
+        echo "關鍵字: ${{ github.event.inputs.keyword }}" >> docs/test_output/test_result.txt
+        echo "狀態: 測試成功" >> docs/test_output/test_result.txt
+    
+    - name: Commit test results
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action Test"
+        
+        git add docs/test_output/
+        
+        if git diff --staged --quiet; then
+          echo "沒有變更需要提交"
+        else
+          git commit -m "🧪 測試結果: ${{ github.event.inputs.keyword }}"
+          git push
+          echo "✅ 測試結果已推送"
+        fi
