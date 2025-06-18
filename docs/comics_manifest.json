@@ -1,0 +1,66 @@
+{
+  "lastUpdated": "2025-06-18T19:47:24.784207",
+  "totalComics": 6,
+  "comics": [
+    {
+      "id": "comic_output_川普不不到稀土_20250618_194510",
+      "title": "川普不不到稀土",
+      "keyword": "川普不不到稀土",
+      "date": "2025年06月18日 19:45",
+      "timestamp": "20250618_194510",
+      "imagePath": "comic_output_川普不不到稀土_20250618_194510/four_panel_comic.png",
+      "scriptPath": "comic_output_川普不不到稀土_20250618_194510/comic_script.txt",
+      "folder": "comic_output_川普不不到稀土_20250618_194510"
+    },
+    {
+      "id": "comic_output_民進黨進口萊豬_20250618_193858",
+      "title": "民進黨進口萊豬",
+      "keyword": "民進黨進口萊豬",
+      "date": "2025年06月18日 19:38",
+      "timestamp": "20250618_193858",
+      "imagePath": "comic_output_民進黨進口萊豬_20250618_193858/four_panel_comic.png",
+      "scriptPath": "comic_output_民進黨進口萊豬_20250618_193858/comic_script.txt",
+      "folder": "comic_output_民進黨進口萊豬_20250618_193858"
+    },
+    {
+      "id": "comic_output_投顧老師被打臉_20250618_193530",
+      "title": "投顧老師被打臉",
+      "keyword": "投顧老師被打臉",
+      "date": "2025年06月18日 19:35",
+      "timestamp": "20250618_193530",
+      "imagePath": "comic_output_投顧老師被打臉_20250618_193530/four_panel_comic.png",
+      "scriptPath": "comic_output_投顧老師被打臉_20250618_193530/comic_script.txt",
+      "folder": "comic_output_投顧老師被打臉_20250618_193530"
+    },
+    {
+      "id": "comic_output_賴總統愛台灣_20250618_193349",
+      "title": "賴總統愛台灣",
+      "keyword": "賴總統愛台灣",
+      "date": "2025年06月18日 19:33",
+      "timestamp": "20250618_193349",
+      "imagePath": "comic_output_賴總統愛台灣_20250618_193349/four_panel_comic.png",
+      "scriptPath": "comic_output_賴總統愛台灣_20250618_193349/comic_script.txt",
+      "folder": "comic_output_賴總統愛台灣_20250618_193349"
+    },
+    {
+      "id": "comic_output_川普提前結束G7_20250618_191426",
+      "title": "川普提前結束G7",
+      "keyword": "川普提前結束G7",
+      "date": "2025年06月18日 19:14",
+      "timestamp": "20250618_191426",
+      "imagePath": "comic_output_川普提前結束G7_20250618_191426/four_panel_comic.png",
+      "scriptPath": "comic_output_川普提前結束G7_20250618_191426/comic_script.txt",
+      "folder": "comic_output_川普提前結束G7_20250618_191426"
+    },
+    {
+      "id": "comic_output_小S撈錢_20250617_163329",
+      "title": "小S撈錢",
+      "keyword": "小S撈錢",
+      "date": "2025年06月17日 16:33",
+      "timestamp": "20250617_163329",
+      "imagePath": "comic_output_小S撈錢_20250617_163329/four_panel_comic.png",
+      "scriptPath": "comic_output_小S撈錢_20250617_163329/comic_script.txt",
+      "folder": "comic_output_小S撈錢_20250617_163329"
+    }
+  ]
+}
