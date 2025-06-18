@@ -389,8 +389,17 @@ def create_output_folder(keyword):
     return folder_name
 
 def main():
-    # Get keyword from user
-    keyword = input("輸入關鍵字來搜尋相關新聞: ")
+    import sys
+    
+    # Check for command line argument
+    if len(sys.argv) > 1:
+        keyword = sys.argv[1]
+        print(f"🎨 使用關鍵字: {keyword}")
+        auto_generate = True  # 自動生成圖像
+    else:
+        # Get keyword from user
+        keyword = input("輸入關鍵字來搜尋相關新聞: ")
+        auto_generate = False  # 詢問用戶是否生成圖像
     
     # Create output folder
     output_folder = create_output_folder(keyword)
@@ -425,9 +434,12 @@ def main():
                 f.write(f"{i}. {news}\n")
             f.write("\n" + "=" * 50 + "\n\n")
             f.write(comic_script)
-        print(f"📝 腳本已儲存為: {script_filename}")
-          # Ask user if they want to generate images
-        generate_images = input("\n是否要生成漫畫圖像？(y/n): ").lower().strip()
+        print(f"📝 腳本已儲存為: {script_filename}")        # Ask user if they want to generate images (or auto-generate)
+        if auto_generate:
+            generate_images = 'y'
+            print("\n🎯 自動模式：開始生成四格漫畫圖像...")
+        else:
+            generate_images = input("\n是否要生成漫畫圖像？(y/n): ").lower().strip()
         
         if generate_images in ['y', 'yes', '是', '好']:
             print("\n開始生成四格漫畫圖像...")

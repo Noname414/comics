@@ -1,0 +1,97 @@
+name: Generate Comic from Keyword
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      keyword:
+        description: '新聞關鍵字'
+        required: true
+        type: string
+
+jobs:
+  generate-comic:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'comic-generation') || github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Extract keyword from issue or input
+      id: extract_keyword
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          echo "keyword=${{ github.event.inputs.keyword }}" >> $GITHUB_OUTPUT
+        else
+          # 從 issue 標題中提取關鍵字
+          title="${{ github.event.issue.title }}"
+          keyword=$(echo "$title" | sed 's/Generate Comic: //')
+          echo "keyword=$keyword" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Generate comic
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      run: |
+        keyword="${{ steps.extract_keyword.outputs.keyword }}"
+        echo "正在為關鍵字 '$keyword' 生成四格漫畫..."
+        
+        # 執行漫畫生成
+        cd "${{ github.workspace }}"
+        python comic_generator.py "$keyword"
+    
+    - name: Update gallery manifest
+      run: |
+        python generate_manifest.py
+    
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # 添加新生成的檔案
+        git add docs/
+        git add -A
+        
+        # 檢查是否有變更
+        if git diff --staged --quiet; then
+          echo "沒有新的漫畫生成"
+        else
+          keyword="${{ steps.extract_keyword.outputs.keyword }}"
+          git commit -m "🎨 自動生成四格漫畫: $keyword"
+          git push
+          echo "✅ 成功生成並推送漫畫: $keyword"
+        fi
+    
+    - name: Close issue if created via web
+      if: github.event_name == 'issues'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '🎨 四格漫畫已生成完成！請前往 [Gallery](${{ github.server_url }}/${{ github.repository }}/pages) 查看結果。'
+          });
+          
+          github.rest.issues.update({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'closed'
+          });

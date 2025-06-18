@@ -39,7 +39,72 @@
         .subtitle {
             color: rgba(255,255,255,0.9);
             font-size: 1.2rem;
-        }        .comics-grid {
+        }
+
+        /* 新增：生成區域樣式 */
+        .generate-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        #keywordInput {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        #generateBtn {
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #generateBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        #generateBtn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-message {
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            min-height: 1.5rem;
+        }
+
+        .status-error {
+            color: #FF6B6B;
+        }
+
+        .status-success {
+            color: #4ECDC4;
+        }
+
+        .comics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
             gap: 2rem;
@@ -170,6 +235,50 @@
                 max-width: 100%;
             }
         }
+
+        /* 新增：關鍵字輸入區域樣式 */
+        .generate-section {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        #keywordInput {
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 20px;
+            width: 300px;
+            max-width: 100%;
+        }
+
+        #generateBtn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        #generateBtn:hover {
+            background: #5a6abf;
+        }
+
+        .status-message {
+            margin-top: 1rem;
+            color: white;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -177,6 +286,17 @@
         <header>
             <h1>🎨 四格漫畫生成器</h1>
             <p class="subtitle">AI 生成的新聞四格漫畫作品展示</p>
+            
+            <!-- 新增：漫畫生成區域 -->
+            <div class="generate-section">
+                <div class="input-group">                    <input type="text" id="keywordInput" placeholder="輸入新聞關鍵字（例如：台股、選舉、科技新聞）" maxlength="50">
+                    <button id="generateBtn" onclick="generateComicWithStatusCheck()">
+                        <span id="btnText">🎯 生成四格漫畫</span>
+                        <span id="btnLoading" style="display: none;">🔄 生成中...</span>
+                    </button>
+                </div>
+                <div id="generateStatus" class="status-message"></div>
+            </div>
         </header>
 
         <main>
@@ -190,9 +310,7 @@
                 🎭 目前還沒有漫畫作品，請先使用生成器創建一些作品！
             </div>
         </main>
-    </div>
-
-    <!-- Modal for full-size image -->
+    </div>    <!-- Modal for full-size image -->
     <div id="imageModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -200,6 +318,8 @@
         </div>
     </div>
 
+    <!-- 引入 API 腳本 -->
+    <script src="comic-api.js"></script>
     <script>
         // Function to load and display comics
         async function loadComics() {
@@ -289,6 +409,100 @@
 
         // Load comics when page loads
         document.addEventListener('DOMContentLoaded', loadComics);
+
+        // 新增：生成四格漫畫功能
+        async function generateComic() {
+            const keywordInput = document.getElementById('keywordInput');
+            const generateBtn = document.getElementById('generateBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const statusDiv = document.getElementById('generateStatus');
+            
+            const keyword = keywordInput.value.trim();
+            
+            if (!keyword) {
+                showStatus('請輸入新聞關鍵字', 'error');
+                return;
+            }
+            
+            // 禁用按鈕和輸入框
+            generateBtn.disabled = true;
+            keywordInput.disabled = true;
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            
+            try {
+                showStatus('正在觸發漫畫生成流程...', 'info');
+                
+                // 觸發 GitHub Actions workflow
+                const success = await triggerComicGeneration(keyword);
+                
+                if (success) {
+                    showStatus(`✅ 已成功觸發「${keyword}」四格漫畫生成！請等待 2-3 分鐘後重新整理頁面查看結果。`, 'success');
+                    
+                    // 清空輸入框
+                    keywordInput.value = '';
+                    
+                    // 3秒後自動重新載入漫畫列表
+                    setTimeout(() => {
+                        showStatus('正在檢查是否有新漫畫...', 'info');
+                        loadComics();
+                    }, 180000); // 3 分鐘後檢查
+                    
+                } else {
+                    showStatus('❌ 生成失敗，請稍後再試', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Generation error:', error);
+                showStatus('❌ 生成過程中發生錯誤，請稍後再試', 'error');
+            } finally {
+                // 重新啟用按鈕和輸入框
+                setTimeout(() => {
+                    generateBtn.disabled = false;
+                    keywordInput.disabled = false;
+                    btnText.style.display = 'inline';
+                    btnLoading.style.display = 'none';
+                }, 5000); // 5秒後重新啟用
+            }
+        }        // 顯示狀態訊息
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('generateStatus');
+            statusDiv.innerHTML = message;  // 使用 innerHTML 支援 HTML 內容
+            statusDiv.className = `status-message status-${type}`;
+        }
+
+        // 觸發 GitHub Actions
+        async function triggerComicGeneration(keyword) {
+            try {
+                // 方案1: 使用 GitHub Issues API (推薦)
+                const issueData = {
+                    title: `Generate Comic: ${keyword}`,
+                    body: `自動生成四格漫畫請求\n\n關鍵字: ${keyword}\n時間: ${new Date().toLocaleString('zh-TW')}\n\n此 issue 由網頁端自動創建，用於觸發漫畫生成流程。`,
+                    labels: ['comic-generation', 'auto-generated']
+                };
+
+                // 這裡需要配置 GitHub API，目前返回模擬成功
+                // 實際部署時需要設定 GitHub Token 和 Repository
+                console.log('會觸發生成:', issueData);
+                
+                // 模擬 API 調用
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                return true;
+                
+            } catch (error) {
+                console.error('Error triggering generation:', error);
+                return false;
+            }
+        }
+
+        // 鍵盤事件：按 Enter 生成漫畫
+        document.getElementById('keywordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateComic();
+            }
+        });
     </script>
 </body>
 </html>
