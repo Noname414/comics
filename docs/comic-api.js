@@ -2,17 +2,46 @@
 const GITHUB_CONFIG = {
     owner: 'sheng-luen-chung',  // 你的 GitHub 用戶名
     repo: 'comics',             // 你的倉庫名稱
-    // 當前使用手動觸發方案
-};
-
-// 當前實現：引導用戶到 GitHub Actions 手動觸發
+    // 當前使用手動觸發方案            // 顯示重新整理提示
+            setTimeout(() => {
+                showStatus(`
+                    <div>
+                        <p><strong>如果 GitHub Actions 頁面沒有自動開啟：</strong></p>
+                        <a href="https://github.com/sheng-luen-chung/comics/actions" target="_blank" 
+                           style="display: inline-block; background: #007bff; color: white; padding: 0.8rem 1.5rem; 
+                                  border-radius: 8px; text-decoration: none; margin: 0.5rem;">
+                            🔗 點擊前往 GitHub Actions
+                        </a>
+                        <br><br>
+                        <p>📖 執行完成後，點擊下方按鈕檢查是否有新漫畫：</p>
+                        <button onclick="checkAndReloadComics('${keyword}')" 
+                                style="background: #4ECDC4; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; margin: 0.5rem;">
+                            🔄 檢查新漫畫
+                        </button>
+                        <button onclick="location.reload()" 
+                                style="background: #FF6B6B; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; margin: 0.5rem;">
+                            🔄 重新整理頁面
+                        </button>
+                    </div>
+                `, 'info');
+            }, 2000);導用戶到 GitHub Actions 手動觸發
 async function triggerComicGeneration(keyword) {
     try {
-        // 準備 GitHub Actions URL
-        const actionsUrl = `https://github.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/actions/workflows/generate-comic.yml`;
+        // 準備 GitHub Actions URL - 修正為正確的路徑
+        const actionsUrl = `https://github.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/actions`;
+        
+        console.log('正在開啟 GitHub Actions 頁面:', actionsUrl);
         
         // 直接開啟 GitHub Actions 頁面
-        window.open(actionsUrl, '_blank');
+        const newWindow = window.open(actionsUrl, '_blank');
+        
+        // 檢查是否成功開啟
+        if (!newWindow) {
+            console.error('無法開啟新視窗，可能被瀏覽器阻擋');
+            // 如果被阻擋，直接跳轉到當前頁面
+            window.location.href = actionsUrl;
+            return true;
+        }
         
         // 顯示詳細指引
         showDetailedInstructions(keyword);
@@ -27,24 +56,46 @@ async function triggerComicGeneration(keyword) {
 // 顯示詳細操作指引
 function showDetailedInstructions(keyword) {
     const instructionsHtml = `
-        <div style="background: rgba(255,255,255,0.95); padding: 2rem; border-radius: 15px; max-width: 600px; margin: 1rem auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-            <h3 style="color: #333; margin-bottom: 1rem;">📋 操作指引</h3>
-            <p style="color: #666; margin-bottom: 1.5rem;">已為您開啟 GitHub Actions 頁面，請按照以下步驟完成「<strong>${keyword}</strong>」四格漫畫生成：</p>
+        <div style="background: rgba(255,255,255,0.95); padding: 2rem; border-radius: 15px; max-width: 650px; margin: 1rem auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <h3 style="color: #333; margin-bottom: 1rem;">📋 GitHub Actions 操作指引</h3>
+            <p style="color: #666; margin-bottom: 1.5rem;">已嘗試為您開啟 GitHub Actions 頁面，請按照以下步驟完成「<strong>${keyword}</strong>」四格漫畫生成：</p>
             
+            <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #ffc107;">
+                <strong>🔗 如果頁面沒有自動開啟：</strong><br>
+                <a href="https://github.com/sheng-luen-chung/comics/actions" target="_blank" style="color: #007bff; text-decoration: underline;">
+                    點擊這裡手動前往 GitHub Actions
+                </a>
+            </div>
+            
+            <h4 style="color: #333; margin: 1.5rem 0 1rem;">操作步驟：</h4>
             <ol style="color: #555; line-height: 1.8; margin-bottom: 1.5rem;">
-                <li>在新開啟的頁面中找到 <strong>"Run workflow"</strong> 按鈕（綠色按鈕）</li>
-                <li>點擊 <strong>"Run workflow"</strong></li>
-                <li>在彈出的表單中，<strong>"新聞關鍵字"</strong> 欄位輸入：<code style="background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">${keyword}</code></li>
-                <li>點擊綠色的 <strong>"Run workflow"</strong> 按鈕執行</li>
-                <li>等待 2-3 分鐘後回到此頁面重新整理查看結果</li>
+                <li>在 GitHub Actions 頁面中找到 <strong>"Generate Comic from Keyword"</strong> workflow</li>
+                <li>點擊該 workflow 進入詳細頁面</li>
+                <li>找到並點擊 <strong>"Run workflow"</strong> 按鈕（灰色或綠色按鈕）</li>
+                <li>在彈出的表單中，<strong>"新聞關鍵字"</strong> 欄位輸入：<br>
+                    <code style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 1.1em;">${keyword}</code></li>
+                <li>點擊綠色的 <strong>"Run workflow"</strong> 按鈕開始執行</li>
+                <li>等待 2-3 分鐘執行完成</li>
+                <li>回到此頁面點擊下方的 "檢查新漫畫" 按鈕</li>
             </ol>
             
             <div style="background: #e8f4fd; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                <strong>💡 提示：</strong> 如果沒有看到 "Run workflow" 按鈕，請確認您已登入 GitHub 並有此倉庫的權限。
+                <strong>💡 常見問題：</strong><br>
+                • 如果看不到 "Run workflow" 按鈕，請確認已登入 GitHub<br>
+                • 如果顯示權限錯誤，請確認您有此倉庫的寫入權限<br>
+                • 執行時間約 2-3 分鐘，請耐心等待
             </div>
             
-            <button onclick="this.parentElement.remove()" style="background: #4ECDC4; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; float: right;">知道了</button>
-            <div style="clear: both;"></div>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button onclick="this.parentElement.parentElement.remove()" 
+                        style="background: #4ECDC4; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; margin-right: 1rem;">
+                    知道了
+                </button>
+                <button onclick="window.open('https://github.com/sheng-luen-chung/comics/actions', '_blank')" 
+                        style="background: #007bff; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer;">
+                    🔗 前往 GitHub Actions
+                </button>
+            </div>
         </div>
     `;
     
