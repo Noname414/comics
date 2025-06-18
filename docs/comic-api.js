@@ -1,7 +1,7 @@
 // GitHub Repository 設定
 const GITHUB_CONFIG = {
-    owner: 'YOUR_GITHUB_USERNAME',  // 請替換為你的 GitHub 用戶名
-    repo: 'comics',                 // 請替換為你的倉庫名稱
+    owner: 'sheng-luen-chung',  // 你的 GitHub 用戶名
+    repo: 'comics',             // 你的倉庫名稱
     // 當前使用手動觸發方案
 };
 
@@ -11,30 +11,68 @@ async function triggerComicGeneration(keyword) {
         // 準備 GitHub Actions URL
         const actionsUrl = `https://github.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/actions/workflows/generate-comic.yml`;
         
-        // 顯示指引訊息
-        const instructions = `
-為了生成「${keyword}」的四格漫畫，請按照以下步驟：
-
-1. 🔗 點擊以下連結前往 GitHub Actions
-2. 📝 點擊 "Run workflow" 按鈕
-3. ⌨️ 在 "新聞關鍵字" 欄位輸入：${keyword}
-4. ▶️ 點擊綠色的 "Run workflow" 按鈕
-5. ⏱️ 等待 2-3 分鐘後回到此頁面重新整理
-
-點擊下方按鈕前往 GitHub Actions：
-        `;
+        // 直接開啟 GitHub Actions 頁面
+        window.open(actionsUrl, '_blank');
         
-        // 創建彈出視窗
-        if (confirm(instructions + '\n\n是否現在前往 GitHub Actions？')) {
-            window.open(actionsUrl, '_blank');
-            return true;
-        }
+        // 顯示詳細指引
+        showDetailedInstructions(keyword);
         
-        return false;
+        return true;
     } catch (error) {
         console.error('Error:', error);
         return false;
     }
+}
+
+// 顯示詳細操作指引
+function showDetailedInstructions(keyword) {
+    const instructionsHtml = `
+        <div style="background: rgba(255,255,255,0.95); padding: 2rem; border-radius: 15px; max-width: 600px; margin: 1rem auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <h3 style="color: #333; margin-bottom: 1rem;">📋 操作指引</h3>
+            <p style="color: #666; margin-bottom: 1.5rem;">已為您開啟 GitHub Actions 頁面，請按照以下步驟完成「<strong>${keyword}</strong>」四格漫畫生成：</p>
+            
+            <ol style="color: #555; line-height: 1.8; margin-bottom: 1.5rem;">
+                <li>在新開啟的頁面中找到 <strong>"Run workflow"</strong> 按鈕（綠色按鈕）</li>
+                <li>點擊 <strong>"Run workflow"</strong></li>
+                <li>在彈出的表單中，<strong>"新聞關鍵字"</strong> 欄位輸入：<code style="background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">${keyword}</code></li>
+                <li>點擊綠色的 <strong>"Run workflow"</strong> 按鈕執行</li>
+                <li>等待 2-3 分鐘後回到此頁面重新整理查看結果</li>
+            </ol>
+            
+            <div style="background: #e8f4fd; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong>💡 提示：</strong> 如果沒有看到 "Run workflow" 按鈕，請確認您已登入 GitHub 並有此倉庫的權限。
+            </div>
+            
+            <button onclick="this.parentElement.remove()" style="background: #4ECDC4; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; float: right;">知道了</button>
+            <div style="clear: both;"></div>
+        </div>
+    `;
+    
+    // 創建覆蓋層
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    `;
+    overlay.innerHTML = instructionsHtml;
+    
+    // 點擊覆蓋層關閉
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            overlay.remove();
+        }
+    });
+    
+    document.body.appendChild(overlay);
 }
 
 // 檢查生成狀態
@@ -78,22 +116,36 @@ async function generateComicWithStatusCheck() {
     generateBtn.disabled = true;
     
     try {
-        showStatus('正在準備生成流程...', 'info');
+        showStatus('🚀 正在開啟 GitHub Actions 頁面...', 'info');
         
-        // 觸發生成（當前版本會引導到 GitHub）
+        // 觸發生成（會開啟新頁面並顯示指引）
         const success = await triggerComicGeneration(keyword);
         
         if (success) {
-            showStatus(`✅ 已引導到 GitHub Actions！請按照指示完成「${keyword}」四格漫畫生成`, 'success');
+            showStatus(`✅ 已開啟 GitHub Actions！請在新頁面中輸入「${keyword}」並執行 workflow`, 'success');
             
-            // 提供手動重新整理按鈕
+            // 清空輸入框
+            keywordInput.value = '';
+            
+            // 顯示重新整理提示
             setTimeout(() => {
-                showStatus(`🔄 生成完成後，點擊這裡重新載入： 
-                    <button onclick="location.reload()" style="padding: 0.5rem 1rem; margin-left: 1rem; background: #4ECDC4; color: white; border: none; border-radius: 5px; cursor: pointer;">重新整理頁面</button>`, 'info');
+                showStatus(`
+                    <div>
+                        <p>� 執行完成後，點擊下方按鈕檢查是否有新漫畫：</p>
+                        <button onclick="checkAndReloadComics('${keyword}')" 
+                                style="background: #4ECDC4; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; margin: 0.5rem;">
+                            🔄 檢查新漫畫
+                        </button>
+                        <button onclick="location.reload()" 
+                                style="background: #FF6B6B; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; margin: 0.5rem;">
+                            🔄 重新整理頁面
+                        </button>
+                    </div>
+                `, 'info');
             }, 3000);
             
         } else {
-            showStatus('❌ 取消生成', 'error');
+            showStatus('❌ 開啟 GitHub Actions 失敗', 'error');
         }
         
     } catch (error) {
@@ -104,5 +156,27 @@ async function generateComicWithStatusCheck() {
         setTimeout(() => {
             generateBtn.disabled = false;
         }, 2000);
+    }
+}
+
+// 檢查並重新載入漫畫
+async function checkAndReloadComics(keyword) {
+    showStatus('🔍 正在檢查是否有新漫畫...', 'info');
+    
+    try {
+        const hasNew = await checkGenerationStatus(keyword);
+        
+        if (hasNew) {
+            showStatus('🎉 發現新漫畫！正在重新載入...', 'success');
+            setTimeout(() => {
+                loadComics();
+                showStatus('✅ 頁面已更新', 'success');
+            }, 1000);
+        } else {
+            showStatus('⏰ 還沒有新漫畫，請稍後再試或手動重新整理頁面', 'info');
+        }
+    } catch (error) {
+        showStatus('❌ 檢查過程中發生錯誤', 'error');
+        console.error('Check error:', error);
     }
 }
