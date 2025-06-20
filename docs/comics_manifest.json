@@ -1,7 +1,19 @@
 {
-  "lastUpdated": "2025-06-20T22:54:00.000000",
-  "totalComics": 12,
+  "lastUpdated": "2025-06-20T23:33:19.231347",
+  "totalComics": 13,
   "comics": [
+    {
+      "id": "comic_output_巴基斯坦_20250620_233255",
+      "title": "巴基斯坦",
+      "keyword": "巴基斯坦",
+      "date": "2025年06月20日 23:32",
+      "timestamp": "20250620_233255",
+      "imagePath": null,
+      "scriptPath": "comic_output_巴基斯坦_20250620_233255/comic_script.txt",
+      "folder": "comic_output_巴基斯坦_20250620_233255",
+      "hasImage": false,
+      "hasScript": true
+    },
     {
       "id": "comic_output_印度被巴期期坦打_20250620_195105",
       "title": "印度被巴期期坦打",
@@ -81,7 +93,8 @@
       "date": "2025年06月18日 19:45",
       "timestamp": "20250618_194510",
       "imagePath": "comic_output_川普不不到稀土_20250618_194510/four_panel_comic.png",
-      "scriptPath": "comic_output_川普不不到稀土_20250618_194510/comic_script.txt",      "folder": "comic_output_川普不不到稀土_20250618_194510",
+      "scriptPath": "comic_output_川普不不到稀土_20250618_194510/comic_script.txt",
+      "folder": "comic_output_川普不不到稀土_20250618_194510",
       "hasImage": true,
       "hasScript": true
     },
