@@ -32,20 +32,19 @@ def scan_comic_outputs():
                     keyword_parts = parts[2:-2] if len(parts) > 4 else [parts[2]]
                     keyword = '_'.join(keyword_parts)
                     timestamp = '_'.join(parts[-2:])
-                    
-                    # 檢查是否有四格漫畫圖片
+                      # 檢查是否有四格漫畫圖片或腳本
                     collage_path = os.path.join(item_path, 'four_panel_comic.png')
                     script_path = os.path.join(item_path, 'comic_script.txt')
                     
-                    if os.path.exists(collage_path):
+                    # 如果有圖片或腳本檔案，就包含這個漫畫
+                    if os.path.exists(collage_path) or os.path.exists(script_path):
                         # 解析時間戳
                         try:
                             date_obj = datetime.strptime(timestamp, '%Y%m%d_%H%M%S')
                             formatted_date = date_obj.strftime('%Y年%m月%d日 %H:%M')
                         except:
                             formatted_date = timestamp
-                        
-                        # 讀取腳本內容獲取更多信息
+                          # 讀取腳本內容獲取更多信息
                         title = keyword
                         if os.path.exists(script_path):
                             try:
@@ -69,9 +68,11 @@ def scan_comic_outputs():
                             'keyword': keyword,
                             'date': formatted_date,
                             'timestamp': timestamp,
-                            'imagePath': f'{item}/four_panel_comic.png',
+                            'imagePath': f'{item}/four_panel_comic.png' if os.path.exists(collage_path) else None,
                             'scriptPath': f'{item}/comic_script.txt' if os.path.exists(script_path) else None,
-                            'folder': item
+                            'folder': item,
+                            'hasImage': os.path.exists(collage_path),
+                            'hasScript': os.path.exists(script_path)
                         }
                         
                         comics_list.append(comic_info)

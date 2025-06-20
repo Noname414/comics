@@ -1,7 +1,27 @@
 {
-  "lastUpdated": "2025-06-20T19:24:35.942100",
-  "totalComics": 10,
+  "lastUpdated": "2025-06-20T20:17:18.274832",
+  "totalComics": 12,
   "comics": [
+    {
+      "id": "comic_output_印度被巴期期坦打_20250620_195105",
+      "title": "印度被巴期期坦打",
+      "keyword": "印度被巴期期坦打",
+      "date": "2025年06月20日 19:51",
+      "timestamp": "20250620_195105",
+      "imagePath": "comic_output_印度被巴期期坦打_20250620_195105/four_panel_comic.png",
+      "scriptPath": "comic_output_印度被巴期期坦打_20250620_195105/comic_script.txt",
+      "folder": "comic_output_印度被巴期期坦打_20250620_195105"
+    },
+    {
+      "id": "comic_output_以色列搞依朗_20250620_194232",
+      "title": "以色列搞依朗",
+      "keyword": "以色列搞依朗",
+      "date": "2025年06月20日 19:42",
+      "timestamp": "20250620_194232",
+      "imagePath": "comic_output_以色列搞依朗_20250620_194232/four_panel_comic.png",
+      "scriptPath": "comic_output_以色列搞依朗_20250620_194232/comic_script.txt",
+      "folder": "comic_output_以色列搞依朗_20250620_194232"
+    },
     {
       "id": "comic_output_老翁開車_20250620_191719",
       "title": "老翁開車",
