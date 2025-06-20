@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-20T20:17:18.274832",
+  "lastUpdated": "2025-06-20T22:54:00.000000",
   "totalComics": 12,
   "comics": [
     {
@@ -10,7 +10,9 @@
       "timestamp": "20250620_195105",
       "imagePath": "comic_output_印度被巴期期坦打_20250620_195105/four_panel_comic.png",
       "scriptPath": "comic_output_印度被巴期期坦打_20250620_195105/comic_script.txt",
-      "folder": "comic_output_印度被巴期期坦打_20250620_195105"
+      "folder": "comic_output_印度被巴期期坦打_20250620_195105",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_以色列搞依朗_20250620_194232",
@@ -20,7 +22,9 @@
       "timestamp": "20250620_194232",
       "imagePath": "comic_output_以色列搞依朗_20250620_194232/four_panel_comic.png",
       "scriptPath": "comic_output_以色列搞依朗_20250620_194232/comic_script.txt",
-      "folder": "comic_output_以色列搞依朗_20250620_194232"
+      "folder": "comic_output_以色列搞依朗_20250620_194232",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_老翁開車_20250620_191719",
@@ -30,7 +34,9 @@
       "timestamp": "20250620_191719",
       "imagePath": "comic_output_老翁開車_20250620_191719/four_panel_comic.png",
       "scriptPath": "comic_output_老翁開車_20250620_191719/comic_script.txt",
-      "folder": "comic_output_老翁開車_20250620_191719"
+      "folder": "comic_output_老翁開車_20250620_191719",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_AI 與 BI_20250620_190822",
@@ -40,7 +46,9 @@
       "timestamp": "20250620_190822",
       "imagePath": "comic_output_AI 與 BI_20250620_190822/four_panel_comic.png",
       "scriptPath": "comic_output_AI 與 BI_20250620_190822/comic_script.txt",
-      "folder": "comic_output_AI 與 BI_20250620_190822"
+      "folder": "comic_output_AI 與 BI_20250620_190822",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_老翁出車禍_20250620_172735",
@@ -50,7 +58,9 @@
       "timestamp": "20250620_172735",
       "imagePath": "comic_output_老翁出車禍_20250620_172735/four_panel_comic.png",
       "scriptPath": "comic_output_老翁出車禍_20250620_172735/comic_script.txt",
-      "folder": "comic_output_老翁出車禍_20250620_172735"
+      "folder": "comic_output_老翁出車禍_20250620_172735",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_老翁撞車_20250620_112150",
@@ -60,7 +70,9 @@
       "timestamp": "20250620_112150",
       "imagePath": "comic_output_老翁撞車_20250620_112150/four_panel_comic.png",
       "scriptPath": "comic_output_老翁撞車_20250620_112150/comic_script.txt",
-      "folder": "comic_output_老翁撞車_20250620_112150"
+      "folder": "comic_output_老翁撞車_20250620_112150",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_川普不不到稀土_20250618_194510",
@@ -69,8 +81,9 @@
       "date": "2025年06月18日 19:45",
       "timestamp": "20250618_194510",
       "imagePath": "comic_output_川普不不到稀土_20250618_194510/four_panel_comic.png",
-      "scriptPath": "comic_output_川普不不到稀土_20250618_194510/comic_script.txt",
-      "folder": "comic_output_川普不不到稀土_20250618_194510"
+      "scriptPath": "comic_output_川普不不到稀土_20250618_194510/comic_script.txt",      "folder": "comic_output_川普不不到稀土_20250618_194510",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_民進黨進口萊豬_20250618_193858",
@@ -80,7 +93,9 @@
       "timestamp": "20250618_193858",
       "imagePath": "comic_output_民進黨進口萊豬_20250618_193858/four_panel_comic.png",
       "scriptPath": "comic_output_民進黨進口萊豬_20250618_193858/comic_script.txt",
-      "folder": "comic_output_民進黨進口萊豬_20250618_193858"
+      "folder": "comic_output_民進黨進口萊豬_20250618_193858",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_投顧老師被打臉_20250618_193530",
@@ -90,7 +105,9 @@
       "timestamp": "20250618_193530",
       "imagePath": "comic_output_投顧老師被打臉_20250618_193530/four_panel_comic.png",
       "scriptPath": "comic_output_投顧老師被打臉_20250618_193530/comic_script.txt",
-      "folder": "comic_output_投顧老師被打臉_20250618_193530"
+      "folder": "comic_output_投顧老師被打臉_20250618_193530",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_賴總統愛台灣_20250618_193349",
@@ -100,7 +117,9 @@
       "timestamp": "20250618_193349",
       "imagePath": "comic_output_賴總統愛台灣_20250618_193349/four_panel_comic.png",
       "scriptPath": "comic_output_賴總統愛台灣_20250618_193349/comic_script.txt",
-      "folder": "comic_output_賴總統愛台灣_20250618_193349"
+      "folder": "comic_output_賴總統愛台灣_20250618_193349",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_川普提前結束G7_20250618_191426",
@@ -110,7 +129,9 @@
       "timestamp": "20250618_191426",
       "imagePath": "comic_output_川普提前結束G7_20250618_191426/four_panel_comic.png",
       "scriptPath": "comic_output_川普提前結束G7_20250618_191426/comic_script.txt",
-      "folder": "comic_output_川普提前結束G7_20250618_191426"
+      "folder": "comic_output_川普提前結束G7_20250618_191426",
+      "hasImage": true,
+      "hasScript": true
     },
     {
       "id": "comic_output_大大的罷免_20250618_163243",
@@ -120,7 +141,9 @@
       "timestamp": "20250618_163243",
       "imagePath": "comic_output_大大的罷免_20250618_163243/four_panel_comic.png",
       "scriptPath": "comic_output_大大的罷免_20250618_163243/comic_script.txt",
-      "folder": "comic_output_大大的罷免_20250618_163243"
+      "folder": "comic_output_大大的罷免_20250618_163243",
+      "hasImage": true,
+      "hasScript": true
     }
   ]
 }
