@@ -1,7 +1,27 @@
 {
-  "lastUpdated": "2025-06-18T16:33:24.293866",
-  "totalComics": 7,
+  "lastUpdated": "2025-06-20T11:22:26.308379",
+  "totalComics": 8,
   "comics": [
+    {
+      "id": "comic_output_老翁出車禍_20250620_172735",
+      "title": "老翁出車禍",
+      "keyword": "老翁出車禍",
+      "date": "2025年06月20日 17:27",
+      "timestamp": "20250620_172735",
+      "imagePath": "comic_output_老翁出車禍_20250620_172735/four_panel_comic.png",
+      "scriptPath": "comic_output_老翁出車禍_20250620_172735/comic_script.txt",
+      "folder": "comic_output_老翁出車禍_20250620_172735"
+    },
+    {
+      "id": "comic_output_老翁撞車_20250620_112150",
+      "title": "老翁撞車",
+      "keyword": "老翁撞車",
+      "date": "2025年06月20日 11:21",
+      "timestamp": "20250620_112150",
+      "imagePath": "comic_output_老翁撞車_20250620_112150/four_panel_comic.png",
+      "scriptPath": "comic_output_老翁撞車_20250620_112150/comic_script.txt",
+      "folder": "comic_output_老翁撞車_20250620_112150"
+    },
     {
       "id": "comic_output_川普不不到稀土_20250618_194510",
       "title": "川普不不到稀土",
@@ -61,16 +81,6 @@
       "imagePath": "comic_output_大大的罷免_20250618_163243/four_panel_comic.png",
       "scriptPath": "comic_output_大大的罷免_20250618_163243/comic_script.txt",
       "folder": "comic_output_大大的罷免_20250618_163243"
-    },
-    {
-      "id": "comic_output_小S撈錢_20250617_163329",
-      "title": "小S撈錢",
-      "keyword": "小S撈錢",
-      "date": "2025年06月17日 16:33",
-      "timestamp": "20250617_163329",
-      "imagePath": "comic_output_小S撈錢_20250617_163329/four_panel_comic.png",
-      "scriptPath": "comic_output_小S撈錢_20250617_163329/comic_script.txt",
-      "folder": "comic_output_小S撈錢_20250617_163329"
     }
   ]
 }
