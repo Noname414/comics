@@ -328,7 +328,7 @@ def generate_comic_images(comic_script, output_folder="."):
 def create_comic_collage(image_files, output_folder="."):
     """Combine the 4 panel images into a single comic strip."""
     print(f"🔍 檢查圖像檔案數量: {len(image_files)}")
-    print(f"📁 圖像檔案列表:")
+    print(f"[FILES] 圖像檔案列表:")
     for i, img_file in enumerate(image_files, 1):
         if os.path.exists(img_file):
             print(f"  ✅ {i}. {img_file}")
@@ -384,7 +384,7 @@ def create_output_folder(keyword):
     # Create the folder if it doesn't exist
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
-        print(f"📁 建立輸出資料夾: {folder_name}")
+        print(f"[FOLDER] 建立輸出資料夾: {folder_name}")
     
     return folder_name
 
@@ -461,15 +461,15 @@ def main():
                 
                 if collage_file:
                     print(f"\n🎉 四格漫畫製作完成！")
-                    print(f"📁 所有檔案儲存在: {output_folder}")
+                    print(f"[SAVED] 所有檔案儲存在: {output_folder}")
                     print(f"個別圖像檔案: {', '.join([os.path.basename(f) for f in existing_image_files])}")
                     print(f"完整四格漫畫: {os.path.basename(collage_file)}")
                 else:
-                    print(f"\n📁 所有檔案儲存在: {output_folder}")
+                    print(f"\n[SAVED] 所有檔案儲存在: {output_folder}")
                     print(f"個別圖像檔案: {', '.join([os.path.basename(f) for f in existing_image_files])}")
             elif len(existing_image_files) > 0:
                 print(f"⚠️ 只找到 {len(existing_image_files)} 張圖像，無法建立完整的四格漫畫")
-                print(f"📁 已生成的檔案儲存在: {output_folder}")
+                print(f"[SAVED] 已生成的檔案儲存在: {output_folder}")
                 print(f"可用圖像檔案: {', '.join([os.path.basename(f) for f in existing_image_files])}")
             else:
                 print("\n❌ 無法生成圖像，請檢查 API 設定和網路連線")

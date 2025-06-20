@@ -33,10 +33,7 @@ function displayComics(comics) {
         gallery.innerHTML = '<p style="color: white; text-align: center;">目前還沒有漫畫作品</p>';
         return;
     }
-    
-    // 顯示容器
-    gallery.style.display = 'grid';    
-    // 顯示容器
+      // 顯示容器
     gallery.style.display = 'grid';
     
     gallery.innerHTML = comics.map(comic => `

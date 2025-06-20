@@ -295,9 +295,8 @@
                     <button onclick="showUpdateInstructions()" style="background: #FF6B6B; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 15px; font-size: 0.9rem; cursor: pointer;">
                         📝 更新清單
                     </button>
-                </div>
-                <div class="input-group"><input type="text" id="keywordInput" placeholder="輸入新聞關鍵字（例如：台股、選舉、科技新聞）" maxlength="50">
-                    <button id="generateBtn" onclick="generateComicWithStatusCheck()">
+                </div>                <div class="input-group"><input type="text" id="keywordInput" placeholder="輸入新聞關鍵字（例如：台股、選舉、科技新聞）" maxlength="50">
+                    <button id="generateBtn" onclick="generateComic()">
                         <span id="btnText">🎯 生成四格漫畫</span>
                         <span id="btnLoading" style="display: none;">🔄 生成中...</span>
                     </button>
@@ -322,11 +321,8 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <img id="modalImage" class="modal-image" src="" alt="">
-        </div>
-    </div>
+        </div>    </div>
 
-    <!-- 引入 API 腳本 -->
-    <script src="comic-api.js"></script>
     <script>
         // Function to load and display comics
         async function loadComics() {
@@ -364,11 +360,14 @@
         }        // Function to get comics list (this would need to be customized)
         async function getComicsList() {
             try {
-                const response = await fetch('comics_manifest.json');
+                // 添加時間戳避免緩存
+                const timestamp = new Date().getTime();
+                const response = await fetch(`comics_manifest.json?t=${timestamp}`);
                 if (!response.ok) {
                     throw new Error('無法載入漫畫清單');
                 }
                 const manifest = await response.json();
+                console.log(`載入了 ${manifest.totalComics} 個漫畫作品`);
                 return manifest.comics || [];
             } catch (error) {
                 console.error('Error fetching comics manifest:', error);
@@ -415,7 +414,7 @@
         }
 
         // Load comics when page loads
-        document.addEventListener('DOMContentLoaded', loadComics);        // 新增：生成四格漫畫功能（本地版本）
+        document.addEventListener('DOMContentLoaded', loadComics);        // 新增：生成四格漫畫功能（完整版本）
         async function generateComic() {
             const keywordInput = document.getElementById('keywordInput');
             const generateBtn = document.getElementById('generateBtn');
@@ -435,10 +434,10 @@
             btnLoading.style.display = 'inline';
             
             try {
-                showStatus('🚀 正在生成四格漫畫，請稍等...', 'info');
+                showStatus('🚀 正在啟動生成程序...', 'info');
                 
-                // 呼叫本地 Python 腳本
-                const response = await fetch('/generate-comic', {
+                // 呼叫 Flask API
+                const response = await fetch('http://localhost:5000/generate-comic', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -449,33 +448,103 @@
                 if (response.ok) {
                     const result = await response.json();
                     if (result.success) {
-                        showStatus('✅ 漫畫生成成功！正在更新頁面...', 'success');
+                        showStatus('✅ 生成請求已啟動！正在監控進度...', 'success');
                         
                         // 清空輸入框
                         keywordInput.value = '';
                         
-                        // 1秒後重新載入漫畫
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1500);
+                        // 開始輪詢狀態
+                        pollGenerationStatus();
                     } else {
                         showStatus('❌ 生成失敗：' + (result.error || '未知錯誤'), 'error');
+                        resetButton();
                     }
                 } else {
-                    // 如果後端 API 不可用，回退到說明模式
+                    // 如果 API 不可用，回退到說明模式
                     showLocalGenerationInstructions(keyword);
+                    resetButton();
                 }
                 
             } catch (error) {
                 console.error('Generation error:', error);
-                // 回退到本地指引
-                showLocalGenerationInstructions(keyword);
-            } finally {
-                // 重新啟用按鈕
-                generateBtn.disabled = false;
-                btnText.style.display = 'inline';
-                btnLoading.style.display = 'none';
+                showStatus('❌ 無法連接到生成服務，請確認 API 服務器是否正在運行', 'error');
+                showApiServerInstructions();
+                resetButton();
             }
+        }
+        
+        // 輪詢生成狀態
+        async function pollGenerationStatus() {
+            try {
+                const response = await fetch('http://localhost:5000/generation-status');
+                if (response.ok) {
+                    const status = await response.json();
+                    
+                    updateGenerationProgress(status);
+                    
+                    if (status.is_generating) {
+                        // 如果還在生成，2秒後再次檢查
+                        setTimeout(pollGenerationStatus, 2000);
+                    } else {
+                        // 生成完成
+                        if (status.status === 'completed') {
+                            showStatus('🎉 漫畫生成完成！正在重新載入頁面...', 'success');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        } else if (status.status === 'error') {
+                            showStatus(`❌ 生成失敗：${status.message}`, 'error');
+                            resetButton();
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Status polling error:', error);
+                showStatus('❌ 無法獲取生成狀態', 'error');
+                resetButton();
+            }
+        }
+        
+        // 更新生成進度
+        function updateGenerationProgress(status) {
+            const progress = Math.round((status.step / status.total_steps) * 100);
+            const progressBar = `
+                <div style="margin: 1rem 0;">
+                    <div style="background: rgba(255,255,255,0.3); border-radius: 10px; overflow: hidden; margin: 0.5rem 0;">
+                        <div style="background: #4ECDC4; height: 8px; width: ${progress}%; transition: width 0.3s ease;"></div>
+                    </div>
+                    <p style="font-size: 0.9rem;">${status.message}</p>
+                    <p style="font-size: 0.8rem; opacity: 0.8;">進度: ${status.step}/${status.total_steps} (${progress}%)</p>
+                </div>
+            `;
+            showStatus(progressBar, 'info');
+        }
+        
+        // 重置按鈕狀態
+        function resetButton() {
+            const generateBtn = document.getElementById('generateBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            
+            generateBtn.disabled = false;
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
+        }
+        
+        // 顯示 API 服務器啟動指引
+        function showApiServerInstructions() {
+            showStatus(`
+                <div style="text-align: left; line-height: 1.6;">
+                    <p><strong>🔧 API 服務器未啟動：</strong></p>
+                    <p>要使用網頁生成功能，請先啟動 API 服務器：</p>
+                    <p>1. 開啟新的 PowerShell 視窗</p>
+                    <p>2. 進入專案目錄：</p>
+                    <code style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 4px; display: block; margin: 0.5rem 0;">cd "c:\\Users\\sheng\\copilot-projects\\comics"</code>
+                    <p>3. 啟動 API 服務器：</p>
+                    <code style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 4px; display: block; margin: 0.5rem 0;">python comic_api_server.py</code>
+                    <p>4. 等看到 "服務地址: http://localhost:5000" 後回到此頁面重試</p>
+                </div>
+            `, 'info');
         }
         
         // 顯示本地生成指引
