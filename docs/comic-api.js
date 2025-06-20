@@ -26,7 +26,7 @@ async function loadComics() {
 
 // 顯示漫畫
 function displayComics(comics) {
-    const gallery = document.getElementById('comic-gallery');
+    const gallery = document.getElementById('comics-container') || document.getElementById('comic-gallery');
     if (!gallery) return;
     
     if (!comics.length) {
@@ -34,13 +34,18 @@ function displayComics(comics) {
         return;
     }
     
+    // 顯示容器
+    gallery.style.display = 'grid';    
+    // 顯示容器
+    gallery.style.display = 'grid';
+    
     gallery.innerHTML = comics.map(comic => `
-        <div class="comic-card" onclick="openModal('${comic.image}', '${comic.title}', '${comic.timestamp}')">
-            <img src="${comic.image}" alt="${comic.title}" onerror="this.src='placeholder.jpg'">
+        <div class="comic-card" onclick="openModal('${comic.imagePath}', '${comic.title}', '${comic.timestamp}')">
+            <img src="${comic.imagePath}" alt="${comic.title}" class="comic-image" onerror="this.src='placeholder.jpg'">
             <div class="comic-info">
-                <h3>${comic.title}</h3>
-                <p class="comic-date">${new Date(comic.timestamp).toLocaleString('zh-TW')}</p>
-                <div class="comic-keyword">${comic.keyword}</div>
+                <div class="comic-title">${comic.title}</div>
+                <div class="comic-date">${comic.date}</div>
+                <span class="comic-keyword">${comic.keyword}</span>
             </div>
         </div>
     `).join('');
@@ -166,35 +171,7 @@ function showDetailedInstructions(keyword) {
         if (e.target === overlay) {
             overlay.remove();
         }
-    });
-    
-    document.body.appendChild(overlay);
-}
-    
-    // 創建覆蓋層
-    const overlay = document.createElement('div');
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.7);
-        z-index: 2000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-    `;
-    overlay.innerHTML = instructionsHtml;
-    
-    // 點擊覆蓋層關閉
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) {
-            overlay.remove();
-        }
-    });
-    
+    });    
     document.body.appendChild(overlay);
 }
 

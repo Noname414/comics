@@ -1,7 +1,27 @@
 {
-  "lastUpdated": "2025-06-20T11:22:26.308379",
-  "totalComics": 8,
+  "lastUpdated": "2025-06-20T19:24:35.942100",
+  "totalComics": 10,
   "comics": [
+    {
+      "id": "comic_output_老翁開車_20250620_191719",
+      "title": "老翁開車",
+      "keyword": "老翁開車",
+      "date": "2025年06月20日 19:17",
+      "timestamp": "20250620_191719",
+      "imagePath": "comic_output_老翁開車_20250620_191719/four_panel_comic.png",
+      "scriptPath": "comic_output_老翁開車_20250620_191719/comic_script.txt",
+      "folder": "comic_output_老翁開車_20250620_191719"
+    },
+    {
+      "id": "comic_output_AI 與 BI_20250620_190822",
+      "title": "AI 與 BI",
+      "keyword": "AI 與 BI",
+      "date": "2025年06月20日 19:08",
+      "timestamp": "20250620_190822",
+      "imagePath": "comic_output_AI 與 BI_20250620_190822/four_panel_comic.png",
+      "scriptPath": "comic_output_AI 與 BI_20250620_190822/comic_script.txt",
+      "folder": "comic_output_AI 與 BI_20250620_190822"
+    },
     {
       "id": "comic_output_老翁出車禍_20250620_172735",
       "title": "老翁出車禍",
