@@ -2,32 +2,40 @@
 
 ## 🚀 快速開始
 
-### 步驟 1：啟動本地伺服器
+### 方法一：完整服務（推薦）
+啟動網頁界面 + API 服務，支援生成新漫畫
+```batch
+# 雙擊執行
+start_full_service.bat
 
-**方法一（推薦）：使用批次檔案**
+# 或手動執行
+python comic_api_server.py  # 啟動 API (終端 1)
+cd docs && python -m http.server 8000  # 啟動網頁 (終端 2)
 ```
-雙擊運行：start_local_server.bat
-```
+- 🌐 網頁界面: http://localhost:8000
+- 🔧 API 服務: http://localhost:5000
 
-**方法二：手動命令**
-```powershell
-cd c:\Users\sheng\copilot-projects\comics\docs
+### 方法二：僅瀏覽模式
+只啟動網頁伺服器，瀏覽現有漫畫
+```batch
+# 雙擊執行
+start_local_server.bat
+
+# 或手動執行
+cd docs
 python -m http.server 8000
 ```
+- 🌐 網頁界面: http://localhost:8000
 
-### 步驟 2：打開瀏覽器
-在瀏覽器中輸入以下任一地址：
-- http://localhost:8000
-- http://127.0.0.1:8000
+## 🔧 替代測試方法
 
-## 🔧 其他測試方法
-
-### 方法二：使用 VS Code Live Server
+### 使用 VS Code Live Server
 1. 在 VS Code 中安裝 "Live Server" 擴展
 2. 右鍵點擊 `docs/index.html`
 3. 選擇 "Open with Live Server"
+4. ⚠️ 注意：此方法無法使用生成功能
 
-### 方法三：使用 Node.js serve
+### 使用 Node.js serve
 ```bash
 npx serve docs
 ```
