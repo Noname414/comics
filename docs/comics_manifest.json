@@ -1,7 +1,43 @@
 {
-  "lastUpdated": "2025-06-21T07:54:28.186598",
-  "totalComics": 20,
+  "lastUpdated": "2025-06-21T12:58:18.985653",
+  "totalComics": 23,
   "comics": [
+    {
+      "id": "comic_output_具俊曄吃軟飯_20250621_125721",
+      "title": "具俊曄吃軟飯",
+      "keyword": "具俊曄吃軟飯",
+      "date": "2025年06月21日 12:57",
+      "timestamp": "20250621_125721",
+      "imagePath": "comic_output_具俊曄吃軟飯_20250621_125721/four_panel_comic.png",
+      "scriptPath": "comic_output_具俊曄吃軟飯_20250621_125721/comic_script.txt",
+      "folder": "comic_output_具俊曄吃軟飯_20250621_125721",
+      "hasImage": true,
+      "hasScript": true
+    },
+    {
+      "id": "comic_output_Labubu_20250621_094454",
+      "title": "Labubu",
+      "keyword": "Labubu",
+      "date": "2025年06月21日 09:44",
+      "timestamp": "20250621_094454",
+      "imagePath": "comic_output_Labubu_20250621_094454/four_panel_comic.png",
+      "scriptPath": "comic_output_Labubu_20250621_094454/comic_script.txt",
+      "folder": "comic_output_Labubu_20250621_094454",
+      "hasImage": true,
+      "hasScript": true
+    },
+    {
+      "id": "comic_output_老司機撞人_20250621_082020",
+      "title": "老司機撞人",
+      "keyword": "老司機撞人",
+      "date": "2025年06月21日 08:20",
+      "timestamp": "20250621_082020",
+      "imagePath": "comic_output_老司機撞人_20250621_082020/four_panel_comic.png",
+      "scriptPath": "comic_output_老司機撞人_20250621_082020/comic_script.txt",
+      "folder": "comic_output_老司機撞人_20250621_082020",
+      "hasImage": true,
+      "hasScript": true
+    },
     {
       "id": "comic_output_虛擬貨幣賺翻_20250621_075342",
       "title": "虛擬貨幣賺翻",
