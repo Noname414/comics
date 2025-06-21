@@ -45,13 +45,12 @@ def run_comic_generation(keyword):
         # 步驟 1: 開始生成
         update_status('starting', f'🚀 開始生成「{keyword}」四格漫畫...', 1)
         time.sleep(1)
-        
-        # 步驟 2: 搜尋新聞
+          # 步驟 2: 搜尋新聞
         update_status('searching', f'🔍 正在搜尋「{keyword}」相關新聞...', 2)
-          # 執行 Python 腳本
+        
+        # 執行 Python 腳本，使用命令行參數傳遞關鍵字，自動生成圖像
         process = subprocess.Popen(
-            ['python', 'comic_generator.py'],
-            stdin=subprocess.PIPE,
+            ['python', 'comic_generator.py', keyword],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -59,10 +58,6 @@ def run_comic_generation(keyword):
             errors='ignore',
             cwd=os.path.dirname(os.path.abspath(__file__))
         )
-        
-        # 發送關鍵字到腳本
-        process.stdin.write(keyword + '\n')
-        process.stdin.flush()
         
         # 等待一段時間後更新狀態
         time.sleep(5)
@@ -74,9 +69,8 @@ def run_comic_generation(keyword):
         if process.returncode == 0:
             # 步驟 4: 生成圖像
             update_status('generating_images', f'🎨 正在生成「{keyword}」漫畫圖像...', 4)
-            time.sleep(2)
-              # 更新 manifest
-            subprocess.run(['python', 'generate_manifest.py'], 
+            time.sleep(2)            # 更新 manifest
+            subprocess.run(['python', '-c', 'import generate_manifest; generate_manifest.generate_comics_manifest()'], 
                          cwd=os.path.dirname(os.path.abspath(__file__)),
                          encoding='utf-8',
                          errors='ignore')

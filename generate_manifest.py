@@ -68,13 +68,12 @@ def scan_comic_outputs():
                     keyword_parts = parts[2:-2] if len(parts) > 4 else [parts[2]]
                     keyword = '_'.join(keyword_parts)
                     timestamp = '_'.join(parts[-2:])
-                    
-                    # 檢查是否有四格漫畫圖片或腳本
+                      # 檢查是否有四格漫畫圖片或腳本
                     collage_path = os.path.join(item_path, 'four_panel_comic.png')
                     script_path = os.path.join(item_path, 'comic_script.txt')
                     
-                    # 如果有圖片或腳本檔案，就包含這個漫畫
-                    if os.path.exists(collage_path) or os.path.exists(script_path):
+                    # 只包含有完整四格漫畫圖片的漫畫（可以修改為 "or" 來包含只有腳本的）
+                    if os.path.exists(collage_path):
                         # 解析時間戳
                         try:
                             date_obj = datetime.strptime(timestamp, '%Y%m%d_%H%M%S')
