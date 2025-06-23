@@ -1,18 +1,19 @@
-import json
+from flask import Flask, jsonify
 from datetime import datetime
 
-def handler(request):
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Content-Type': 'application/json; charset=utf-8'
-    }
-    
-    response = {
+app = Flask(__name__)
+
+@app.route('/api/health', methods=['GET'])
+def health():
+    result = {
         'status': 'ok',
         'message': '四格漫畫生成器 Vercel API 運行中',
         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
     
-    return (json.dumps(response, ensure_ascii=False), 200, headers) 
+    response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+if __name__ == '__main__':
+    app.run() 
