@@ -2,7 +2,9 @@
 *.bat
 *.ps1
 *.py
-!api/*.py
+
+# 暫時排除 API（避免檔案大小問題）
+api/
 
 # 測試檔案
 test_*.py
@@ -20,10 +22,32 @@ WEB_*.md
 *.log
 *.raw
 
-# Python 快取
+# Python 快取和編譯檔案
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+*.so
+*.dll
+*.dylib
+
+# Python 虛擬環境
+venv/
+env/
+.venv/
+.env/
+
+# Python 套件快取
+.mypy_cache/
+.pytest_cache/
+.coverage
+*.egg-info/
+dist/
+build/
+
+# 大型漫畫輸出檔案
+docs/comic_output_*/
+!docs/comics_manifest.json
 
 # 環境檔案
 .env
@@ -41,4 +65,13 @@ Thumbs.db
 
 # 備份檔案
 *.bak
-*.backup 
+*.backup
+
+# Git 檔案
+.git/
+.gitignore
+
+# Node.js
+node_modules/
+package-lock.json
+yarn.lock 

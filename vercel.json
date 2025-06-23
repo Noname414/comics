@@ -1,14 +1,6 @@
 {
-  "buildCommand": "echo 'No build needed'",
+  "buildCommand": "echo 'Static site - no build needed'",
   "outputDirectory": "docs",
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/docs/$1"
-    }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 } 
