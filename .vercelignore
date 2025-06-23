@@ -1,0 +1,44 @@
+# 開發檔案
+*.bat
+*.ps1
+*.py
+!api/*.py
+
+# 測試檔案
+test_*.py
+debug_*.py
+
+# 文檔檔案（除了部署指南）
+README.md
+LOCAL_*.md
+GITHUB_*.md
+WEB_*.md
+*.md
+!VERCEL_DEPLOYMENT.md
+
+# 日誌檔案
+*.log
+*.raw
+
+# Python 快取
+__pycache__/
+*.pyc
+*.pyo
+
+# 環境檔案
+.env
+.env.local
+
+# IDE 檔案
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 系統檔案
+.DS_Store
+Thumbs.db
+
+# 備份檔案
+*.bak
+*.backup 

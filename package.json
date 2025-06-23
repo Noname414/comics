@@ -1,0 +1,27 @@
+{
+  "name": "comics-generator",
+  "version": "1.0.2",
+  "description": "四格漫畫生成器 - AI 生成的新聞四格漫畫",
+  "main": "docs/index.html",
+  "scripts": {
+    "dev": "cd docs && python -m http.server 8000",
+    "build": "echo 'Static site, no build needed'",
+    "start": "echo 'Deployed on Vercel'"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "keywords": [
+    "comic",
+    "ai",
+    "generator",
+    "taiwan",
+    "news"
+  ],
+  "author": "您的名字",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sheng-luen-chung/comics.git"
+  }
+} 
