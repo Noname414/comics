@@ -2,9 +2,7 @@
 *.bat
 *.ps1
 *.py
-
-# 暫時排除 API（避免檔案大小問題）
-api/
+!api/*.py
 
 # 測試檔案
 test_*.py

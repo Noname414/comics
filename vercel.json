@@ -1,6 +1,23 @@
 {
-  "buildCommand": "echo 'Static site - no build needed'",
-  "outputDirectory": "docs",
-  "cleanUrls": true,
-  "trailingSlash": false
+  "version": 2,
+  "builds": [
+    {
+      "src": "docs/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/*.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/docs/$1"
+    }
+  ]
 } 

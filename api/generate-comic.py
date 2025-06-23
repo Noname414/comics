@@ -1,61 +1,49 @@
-# -*- coding: utf-8 -*-
-import os
-import sys
 import json
-from datetime import datetime
-from http.server import BaseHTTPRequestHandler
 
-# 設定編碼
-if sys.platform == 'win32':
-    os.environ['PYTHONIOENCODING'] = 'utf-8'
-
-class handler(BaseHTTPRequestHandler):
-    def do_POST(self):
-        # 處理 CORS
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
-        
+def handler(request):
+    # 處理 CORS
+    headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Content-Type': 'application/json; charset=utf-8'
+    }
+    
+    # 處理 OPTIONS 請求
+    if request.method == 'OPTIONS':
+        return ('', 200, headers)
+    
+    # 處理 POST 請求
+    if request.method == 'POST':
         try:
-            # 讀取請求內容
-            content_length = int(self.headers['Content-Length'])
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            # 解析請求數據
+            data = request.get_json()
+            if not data:
+                return (json.dumps({'success': False, 'error': '無效的請求數據'}), 400, headers)
             
             keyword = data.get('keyword', '').strip()
             
             if not keyword:
-                response = {'success': False, 'error': '請提供關鍵字'}
-                self.wfile.write(json.dumps(response, ensure_ascii=False).encode('utf-8'))
-                return
+                return (json.dumps({'success': False, 'error': '請提供關鍵字'}), 400, headers)
             
-            # 由於 Vercel 的 serverless 限制，我們返回指引訊息
-            # 引導用戶使用 GitHub Actions 進行實際生成
+            # 返回 GitHub Actions 引導信息
             response = {
                 'success': True,
                 'message': f'請使用 GitHub Actions 生成「{keyword}」四格漫畫',
-                'github_actions_url': 'https://github.com/sheng-luen-chung/comics/actions/workflows/generate-comic.yml',
+                'github_actions_url': 'https://github.com/Noname414/comics/actions/workflows/generate-comic.yml',
                 'instructions': {
                     'step1': '前往 GitHub Actions 頁面',
-                    'step2': '點擊 "Run workflow" 按鈕',
+                    'step2': '點擊 "Run workflow" 按鈕', 
                     'step3': f'輸入關鍵字: {keyword}',
                     'step4': '等待執行完成後重新整理此頁面'
                 }
             }
             
-            self.wfile.write(json.dumps(response, ensure_ascii=False).encode('utf-8'))
+            return (json.dumps(response, ensure_ascii=False), 200, headers)
             
         except Exception as e:
             response = {'success': False, 'error': f'處理請求時發生錯誤: {str(e)}'}
-            self.wfile.write(json.dumps(response, ensure_ascii=False).encode('utf-8'))
+            return (json.dumps(response, ensure_ascii=False), 500, headers)
     
-    def do_OPTIONS(self):
-        # 處理 CORS preflight
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers() 
+    # 不支援的方法
+    return (json.dumps({'success': False, 'error': '不支援的請求方法'}), 405, headers) 
